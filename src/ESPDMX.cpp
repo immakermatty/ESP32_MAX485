@@ -18,7 +18,7 @@
 
 
 #define dmxMaxChannel  512
-#define defaultMax 32
+#define defaultMax 512
 
 #define DMXSPEED       250000
 #define DMXFORMAT      SERIAL_8N2

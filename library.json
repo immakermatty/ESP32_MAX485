@@ -1,12 +1,12 @@
 {
-    "name": "ESPDMX",
+    "name": "ESP32_MAX485",
     "keywords": "DMX, controller, remote",
-    "description": "Control DMX lights with an ESP8266",
+    "description": "Control DMX lights using MAX485 with an ESP32",
     "repository":
     {
         "type": "git",
-        "url": "https://github.com/Rickgg/ESP-Dmx"
+        "url": "https://github.com/immakermatty/ESP32_MAX485"
     },
     "frameworks": "arduino",
-    "platforms": "espressif"
+    "platforms": "espressif32"
 }

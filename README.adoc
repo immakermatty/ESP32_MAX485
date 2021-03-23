@@ -1,3 +1,6 @@
+
+Totally rewritten by @makermatty
+
 = DMX Library for Arduino with ESP32 =
 
 The DMX library allows sending data from Serial1 in DMX format.

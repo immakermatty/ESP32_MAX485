@@ -24,12 +24,20 @@
 #define DMX_MIN_CHANNEL 1
 #define DMX_MIN_TXSLOTS 24
 
-MAX485_DMX::MAX485_DMX(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pin, HardwareSerial& serialInterface)
+MAX485_DMX::MAX485_DMX(HardwareSerial& serialInterface)
     : m_serial(serialInterface)
-    , m_txPin(di_pin)
-    , m_rxPin(ro_pin)
+    , m_txPin(-1)
+    , m_rxPin(-1)
     , m_dmxSlots {}
 {
+    memset(m_dmxSlots, 0, sizeof(m_dmxSlots));
+}
+
+void MAX485_DMX::begin(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pin)
+{
+    m_txPin = di_pin;
+    m_rxPin = ro_pin;
+
     // de_pin & re_pin together HIGH => MAX485 is a transmitter
     // LOW => MAX485 is a receiver
 
@@ -37,11 +45,6 @@ MAX485_DMX::MAX485_DMX(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pi
     pinMode(de_pin, INPUT_PULLUP);
     pinMode(re_pin, INPUT_PULLUP);
 
-    memset(m_dmxSlots, 0, sizeof(m_dmxSlots));
-}
-
-void MAX485_DMX::begin()
-{
     m_serial.begin(SERIAL_BAUDRATE_DMX, SERIAL_CONFIG_DMX, m_rxPin, m_txPin);
 }
 

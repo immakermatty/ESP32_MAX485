@@ -42,8 +42,12 @@ void MAX485_DMX::begin(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pi
     // LOW => MAX485 is a receiver
 
     //lets set it pernamently as a transmitter
-    pinMode(de_pin, INPUT_PULLUP);
-    pinMode(re_pin, INPUT_PULLUP);
+    if (de_pin != -1) {
+        pinMode(de_pin, INPUT_PULLUP);
+    }
+    if (re_pin != -1) {
+        pinMode(re_pin, INPUT_PULLUP);
+    }
 
     m_serial.begin(SERIAL_BAUDRATE_DMX, SERIAL_CONFIG_DMX, m_rxPin, m_txPin);
 }

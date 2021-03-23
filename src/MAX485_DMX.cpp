@@ -33,20 +33,20 @@ MAX485_DMX::MAX485_DMX(HardwareSerial& serialInterface)
     memset(m_dmxSlots, 0, sizeof(m_dmxSlots));
 }
 
-void MAX485_DMX::begin(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pin)
+void MAX485_DMX::begin(int8_t diPin, int8_t dePin, int8_t rePin, int8_t roPin)
 {
-    m_txPin = di_pin;
-    m_rxPin = ro_pin;
+    m_txPin = diPin;
+    m_rxPin = roPin;
 
-    // de_pin & re_pin together HIGH => MAX485 is a transmitter
+    // dePin & rePin together HIGH => MAX485 is a transmitter
     // LOW => MAX485 is a receiver
 
     //lets set it pernamently as a transmitter
-    if (de_pin != -1) {
-        pinMode(de_pin, INPUT_PULLUP);
+    if (dePin != -1) {
+        pinMode(dePin, INPUT_PULLUP);
     }
-    if (re_pin != -1) {
-        pinMode(re_pin, INPUT_PULLUP);
+    if (rePin != -1) {
+        pinMode(rePin, INPUT_PULLUP);
     }
 
     m_serial.begin(SERIAL_BAUDRATE_DMX, SERIAL_CONFIG_DMX, m_rxPin, m_txPin);

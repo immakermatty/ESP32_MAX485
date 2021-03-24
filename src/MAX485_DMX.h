@@ -23,9 +23,9 @@
 
 class MAX485_DMX {
 public:
-    MAX485_DMX(int8_t di_pin, int8_t de_pin, int8_t re_pin, int8_t ro_pin, HardwareSerial& serialInterface = Serial1);
+    MAX485_DMX(HardwareSerial& serialInterface = Serial1);
 
-    void begin();
+    void begin(int8_t diPin, int8_t dePin, int8_t rePin, int8_t roPin);
     void end();
 
     uint8_t getValue(size_t channel);

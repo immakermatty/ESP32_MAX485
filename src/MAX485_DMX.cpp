@@ -24,9 +24,11 @@
 #define DMX_MIN_TXSLOTS 24
 
 MAX485_DMX::MAX485_DMX(HardwareSerial& serialInterface)
-    : m_serial(serialInterface)
+    : serial(serialInterface)
     , m_txPin(-1)
     , m_rxPin(-1)
+    , m_dePin(-1);
+    , m_rePin(-1);
     , m_dmxSlots {}
 {
     memset(m_dmxSlots, 0, sizeof(m_dmxSlots));
@@ -37,24 +39,30 @@ void MAX485_DMX::begin(int8_t diPin, int8_t dePin, int8_t rePin, int8_t roPin)
     m_txPin = diPin;
     m_rxPin = roPin;
 
+    m_dePin = dePin;
+    m_rePin = rePin;
+
+    pinMode(m_dePin, OUTPUT);
+    pinMode(m_rePin, OUTPUT);
+
     // dePin & rePin together HIGH => MAX485 is a transmitter
     // LOW => MAX485 is a receiver
 
-    //lets set it pernamently as a transmitter
-    if (dePin != -1) {
-        pinMode(dePin, INPUT_PULLUP);
+    //set as a receiver
+    if (m_dePin != -1) {
+        digitalWrite(m_dePin, LOW);
     }
-    if (rePin != -1) {
-        pinMode(rePin, INPUT_PULLUP);
+    if (m_rePin != -1) {
+        digitalWrite(m_rePin, LOW);
     }
 
-    m_serial.begin(SERIAL_BAUDRATE_DMX, SERIAL_CONFIG, m_rxPin, m_txPin);
+    serial.begin(SERIAL_BAUDRATE_DMX, SERIAL_CONFIG, m_rxPin, m_txPin);
+    serial.setTimeout(1);
 }
-
 
 void MAX485_DMX::end()
 {
-    m_serial.end();
+    serial.end();
 }
 
 // Function to read DMX buffer
@@ -83,6 +91,7 @@ void MAX485_DMX::setValue(size_t channel, uint8_t value)
 // Function to update the DMX bus
 void MAX485_DMX::writeOut(size_t channels, bool wait)
 {
+
     if (channels < DMX_MIN_TXSLOTS)
         channels = DMX_MIN_TXSLOTS;
     if (channels > DMX_MAX_CHANNEL)
@@ -90,16 +99,32 @@ void MAX485_DMX::writeOut(size_t channels, bool wait)
 
     m_dmxSlots[0] = 0x00;
 
+    //set as a transmitter
+    if (m_dePin != -1) {
+        digitalWrite(m_dePin, HIGH);
+    }
+    if (m_rePin != -1) {
+        digitalWrite(m_rePin, HIGH);
+    }
+
     // sending break
-    m_serial.updateBaudRate(SERIAL_BAUDRATE_BREAK);
-    m_serial.write(0x00);
-    m_serial.flush();
+    serial.updateBaudRate(SERIAL_BAUDRATE_BREAK);
+    serial.write(0x00);
+    serial.flush();
 
     // sending data
-    m_serial.updateBaudRate(SERIAL_BAUDRATE_DMX);
-    m_serial.write(m_dmxSlots, channels + 1);
-    
-    if(wait) {
-        m_serial.flush();
+    serial.updateBaudRate(SERIAL_BAUDRATE_DMX);
+    serial.write(m_dmxSlots, channels + 1);
+
+    if (wait) {
+        serial.flush();
+    }
+
+    //set as a receiver
+    if (m_dePin != -1) {
+        digitalWrite(m_dePin, LOW);
+    }
+    if (m_rePin != -1) {
+        digitalWrite(m_rePin, LOW);
     }
 }

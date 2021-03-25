@@ -36,11 +36,12 @@ public:
     HardwareSerial& serial;
 
 private:
+    uint8_t m_dmxSlots[513];
+
     int8_t m_txPin;
     int8_t m_rxPin;
     int8_t m_dePin;
     int8_t m_rePin;
-    uint8_t m_dmxSlots[513];
 };
 
 #endif

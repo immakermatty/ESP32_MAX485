@@ -25,11 +25,11 @@
 
 MAX485_DMX::MAX485_DMX(HardwareSerial& serialInterface)
     : serial(serialInterface)
+    , m_dmxSlots {}
     , m_txPin(-1)
     , m_rxPin(-1)
-    , m_dePin(-1);
-    , m_rePin(-1);
-    , m_dmxSlots {}
+    , m_dePin(-1)
+    , m_rePin(-1)
 {
     memset(m_dmxSlots, 0, sizeof(m_dmxSlots));
 }

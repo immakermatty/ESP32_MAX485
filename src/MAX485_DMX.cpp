@@ -91,7 +91,6 @@ void MAX485_DMX::setValue(size_t channel, uint8_t value)
 // Function to update the DMX bus
 void MAX485_DMX::writeOut(size_t channels, bool wait)
 {
-
     if (channels < DMX_MIN_TXSLOTS)
         channels = DMX_MIN_TXSLOTS;
     if (channels > DMX_MAX_CHANNEL)
